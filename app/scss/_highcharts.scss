@@ -64,7 +64,7 @@
   /* Axes */
   .highcharts-axis-line {
     fill: none;
-    stroke: $slate-secondary-6;
+    // stroke: $slate-secondary-6;
   }
   
   .highcharts-yaxis .highcharts-axis-line {
@@ -84,7 +84,8 @@
   .highcharts-yaxis-labels {
     fill: $slate-secondary-5;
     // use this to change the axis label
-    & span:first-child {
+    & span:last-child {
+      transform: translate(10px,0) !important;
       &:after {
         content: "%";
     }
@@ -94,6 +95,9 @@
   .highcharts-grid-line {
     fill: none;
     stroke: $slate-secondary-3;
+    &:nth-child(5) {
+      stroke: $slate-secondary-6;
+    }
   }
   
   .highcharts-xaxis-grid .highcharts-grid-line {

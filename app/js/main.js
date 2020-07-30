@@ -12,13 +12,13 @@ Highcharts.setOptions({
     }
 });
 
-let chartId = document.getElementById("chart-container");
+let chartIdGDPQuarterly = document.getElementById("chart-container-gdp-quarterly");
 
 // checks for the chart ID and displays a backup image if the browser can't find it
 setTimeout(function() {
-    if(chartId.innerHTML === "") {
+    if(chartIdGDPQuarterly.innerHTML === "") {
         // console.log('noId');
-        let chartArea = document.getElementsByClassName("chart-area");
+        let chartAreaGDPQuarterly = document.getElementsByClassName("chart-area-gdp-quarterly");
         for(var i = 0; i < chartArea.length; i++) {
             chartArea[i].style.display = "none";
         } 
@@ -30,9 +30,9 @@ setTimeout(function() {
 },500);
 
 function drawHighcharts() {
-    Highcharts.chart(chartId, {
+    Highcharts.chart(chartIdGDPQuarterly, {
         chart: {
-            type: 'bar',
+            type: 'column',
             styledMode: true,
             spacingBottom: 25,
             spacingRight: 100,
@@ -43,7 +43,8 @@ function drawHighcharts() {
             text: null
         },
         data: {
-            googleSpreadsheetKey: '1YOKb5l2VM4aAB2r20N_1aT_1vEajYrP3U-U3A6lZbC0'
+            googleSpreadsheetKey: '1EY_-S-brWEy16L4LvDP7_Y8JNaq2XahWj2dUV7FIgjc',
+            googleSpreadsheetWorksheet: 1
         },
         // for bar charts only
         plotOptions: {
@@ -69,19 +70,38 @@ function drawHighcharts() {
         //     }
         // },
         legend: {
-            align: 'right',
-            symbolRadius: 0,
-            verticalAlign: 'top',
-            x: 10,
-            itemMarginTop: -10
+            enabled: false
         },
         xAxis: {
             labels: {
                 style: {
                     whiteSpace: 'nowrap'
+                },
+                formatter: function () {
+                    var s = "";
+                    if (Highcharts.dateFormat('%b', this.value) == 'Jan') {
+                        s = s + "Q4"
+                    };
+                    if (Highcharts.dateFormat('%b', this.value) == 'Apr') {
+                        s = s + "Q1"
+                    };
+                    if (Highcharts.dateFormat('%b', this.value) == 'Jul') {
+                        s = s + "Q2"
+                    };
+                    if (Highcharts.dateFormat('%b', this.value) == 'Oct') {
+                        s = s + "Q3"
+                    };
+                    if (Highcharts.dateFormat('%b', this.value) == 'Jan') {
+                        s = s + " '" + (Highcharts.dateFormat('%y', this.value)-1);
+                    } else {
+                        s = s + " '" + Highcharts.dateFormat('%y', this.value);
+                    };
+                    
+                    return s;
                 }
             },
             tickLength: 5,
+            type: 'datetime',
             // edits xAxis ticks
             // dateTimeLabelFormats: {
             //     week: '%b. %e',
@@ -94,6 +114,7 @@ function drawHighcharts() {
                 useHTML: true,
                 overflow: 'allow'
             },
+            tickAmount: 6
             // adds commas to thousands
             // formatter: function () {
             //     return Highcharts.numberFormat(this.value,0,'.',',');
@@ -104,7 +125,10 @@ function drawHighcharts() {
         },
         tooltip: {
             shadow: false,
-            padding: 10
+            padding: 10,
+            formatter: function () {
+                return "GDP change: <b>" + this.y + '%</b>'
+            }
         },
         responsive: {
             rules: [{
